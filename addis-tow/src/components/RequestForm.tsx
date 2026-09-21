@@ -1,7 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { services, vehicleTypes, urgencyLevels, site } from "@/lib/site";
+import { services, site } from "@/lib/site";
+import { useLanguage, interpolate } from "@/lib/i18n/LanguageProvider";
 
 type Form = {
   service: string;
@@ -27,6 +28,8 @@ const empty: Form = {
   notes: "",
 };
 
+const urgencyValues = ["blocking-traffic", "unsafe", "safe", "scheduled"] as const;
+
 /** Accepts 0911234567, +251911234567, 251911234567 and spaced variants. */
 function validPhone(v: string) {
   const digits = v.replace(/[\s-]/g, "");
@@ -40,6 +43,9 @@ export default function RequestForm({
   defaultService?: string;
   variant?: "full" | "compact";
 }) {
+  const { t } = useLanguage();
+  const f = t.form;
+
   const [step, setStep] = useState(0);
   const [form, setForm] = useState<Form>({ ...empty, service: defaultService });
   const [errors, setErrors] = useState<Partial<Record<keyof Form, string>>>({});
@@ -51,7 +57,7 @@ export default function RequestForm({
   const [failed, setFailed] = useState("");
 
   const set = (k: keyof Form, v: string) => {
-    setForm((f) => ({ ...f, [k]: v }));
+    setForm((prev) => ({ ...prev, [k]: v }));
     setErrors((e) => ({ ...e, [k]: undefined }));
   };
 
@@ -60,20 +66,18 @@ export default function RequestForm({
   function checkStep(i: number) {
     const e: Partial<Record<keyof Form, string>> = {};
     if (i === 0) {
-      if (!form.service) e.service = "Pick the help you need.";
-      if (!form.vehicle) e.vehicle = "Tell us what you drive.";
+      if (!form.service) e.service = f.errors.service;
+      if (!form.vehicle) e.vehicle = f.errors.vehicle;
     }
     if (i === 1) {
-      if (form.location.trim().length < 4)
-        e.location = "A landmark is enough — 'Bole, opposite Edna Mall'.";
-      if (!form.urgency) e.urgency = "Choose how the car is sitting right now.";
+      if (form.location.trim().length < 4) e.location = f.errors.location;
+      if (!form.urgency) e.urgency = f.errors.urgency;
       if (form.urgency === "scheduled" && !form.scheduledFor)
-        e.scheduledFor = "Pick a date and time.";
+        e.scheduledFor = f.errors.schedule;
     }
     if (i === 2) {
-      if (form.name.trim().length < 2) e.name = "We need a name for the driver.";
-      if (!validPhone(form.phone))
-        e.phone = "Enter a working Ethiopian mobile number.";
+      if (form.name.trim().length < 2) e.name = f.errors.name;
+      if (!validPhone(form.phone)) e.phone = f.errors.phone;
     }
     setErrors(e);
     return Object.keys(e).length === 0;
@@ -85,10 +89,7 @@ export default function RequestForm({
 
   function useMyLocation() {
     if (!navigator.geolocation) {
-      setErrors((e) => ({
-        ...e,
-        location: "This browser cannot share location. Type a landmark instead.",
-      }));
+      setErrors((e) => ({ ...e, location: f.errors.geoUnsupported }));
       return;
     }
     setLocating(true);
@@ -102,10 +103,7 @@ export default function RequestForm({
       },
       () => {
         setLocating(false);
-        setErrors((e) => ({
-          ...e,
-          location: "Location was blocked. Type the nearest landmark instead.",
-        }));
+        setErrors((e) => ({ ...e, location: f.errors.locationBlocked }));
       },
       { enableHighAccuracy: true, timeout: 10000 }
     );
@@ -117,7 +115,7 @@ export default function RequestForm({
     setSending(true);
     setFailed("");
     try {
-      const res = await fetch("api/requests", {
+      const res = await fetch("/api/requests", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(form),
@@ -126,9 +124,7 @@ export default function RequestForm({
       if (!res.ok) throw new Error(data.error ?? "Request failed");
       setResult({ reference: data.reference, eta: data.eta });
     } catch {
-      setFailed(
-        `We could not send that. Call ${site.phoneDisplay} and dispatch will take the details.`
-      );
+      setFailed(interpolate(f.errors.submitFailed, { phone: site.phoneDisplay }));
     } finally {
       setSending(false);
     }
@@ -141,14 +137,13 @@ export default function RequestForm({
           <circle className="track" cx="37" cy="37" r="32" />
           <circle className="bar" cx="37" cy="37" r="32" />
         </svg>
-        <h2>A truck is being assigned</h2>
+        <h2>{f.successTitle}</h2>
         <span className="ref">{result.reference}</span>
         <p style={{ margin: "0 auto 1rem", maxWidth: "36ch" }}>
-          Dispatch is calling you in the next few minutes to confirm the price.
-          Estimated arrival is about {result.eta} minutes once the driver sets off.
+          {interpolate(f.successBody, { eta: String(result.eta) })}
         </p>
         <a className="btn btn-call btn-block" href={`tel:${site.phone}`}>
-          Call dispatch now
+          {f.callDispatch}
         </a>
         <button
           className="btn btn-ghost btn-block"
@@ -159,7 +154,7 @@ export default function RequestForm({
             setForm({ ...empty });
           }}
         >
-          Send another request
+          {f.sendAnother}
         </button>
       </div>
     );
@@ -174,39 +169,41 @@ export default function RequestForm({
       </div>
 
       <p className="hint" style={{ marginBottom: "1.1rem" }}>
-        Step {step + 1} of {totalSteps} ·{" "}
-        {["What happened", "Where you are", "How to reach you"][step]}
+        {interpolate(f.stepOf, { n: String(step + 1), total: String(totalSteps) })} ·{" "}
+        {f.stepNames[step]}
       </p>
 
       {step === 0 && (
         <div className="step-pane" key="s0">
           <div className={`field ${errors.service ? "field-error" : ""}`}>
-            <label htmlFor="service">What do you need?</label>
+            <label htmlFor="service">{f.serviceLabel}</label>
             <select
               id="service"
               value={form.service}
               onChange={(e) => set("service", e.target.value)}
             >
-              <option value="">Choose a service</option>
+              <option value="">{f.servicePlaceholder}</option>
               {services.map((s) => (
                 <option key={s.slug} value={s.slug}>
-                  {s.name} — from {s.priceFrom.toLocaleString()} birr
+                  {(t.services.items[s.slug]?.name ?? s.name)}
+                  {" — "}
+                  {interpolate(f.priceFromOption, { price: s.priceFrom.toLocaleString() })}
                 </option>
               ))}
-              <option value="not-sure">Not sure — help me work it out</option>
+              <option value="not-sure">{f.notSure}</option>
             </select>
             {errors.service && <p className="err">{errors.service}</p>}
           </div>
 
           <div className={`field ${errors.vehicle ? "field-error" : ""}`}>
-            <label htmlFor="vehicle">What are you driving?</label>
+            <label htmlFor="vehicle">{f.vehicleLabel}</label>
             <select
               id="vehicle"
               value={form.vehicle}
               onChange={(e) => set("vehicle", e.target.value)}
             >
-              <option value="">Choose a vehicle type</option>
-              {vehicleTypes.map((v) => (
+              <option value="">{f.vehiclePlaceholder}</option>
+              {f.vehicleTypes.map((v) => (
                 <option key={v} value={v}>
                   {v}
                 </option>
@@ -220,16 +217,16 @@ export default function RequestForm({
       {step === 1 && (
         <div className="step-pane" key="s1">
           <div className={`field ${errors.location ? "field-error" : ""}`}>
-            <label htmlFor="location">Where is the car?</label>
+            <label htmlFor="location">{f.locationLabel}</label>
             <input
               id="location"
               value={form.location}
               onChange={(e) => set("location", e.target.value)}
-              placeholder="Megenagna, in front of Zefmesh Grand Mall"
+              placeholder={f.locationPlaceholder}
               autoComplete="street-address"
             />
             <p className="help">
-              A landmark beats an address here.{" "}
+              {f.locationHelp}{" "}
               <button
                 type="button"
                 onClick={useMyLocation}
@@ -243,26 +240,26 @@ export default function RequestForm({
                   cursor: "pointer",
                 }}
               >
-                {locating ? "Finding you…" : "Use my GPS location"}
+                {locating ? f.locating : f.useGps}
               </button>
-              {form.coords && " ✓ pin attached"}
+              {form.coords && f.pinAttached}
             </p>
             {errors.location && <p className="err">{errors.location}</p>}
           </div>
 
           <div className={`field ${errors.urgency ? "field-error" : ""}`}>
-            <label>How is the car sitting?</label>
+            <label>{f.urgencyLabel}</label>
             <div className="chips">
-              {urgencyLevels.map((u) => (
+              {urgencyValues.map((val, i) => (
                 <button
-                  key={u.value}
+                  key={val}
                   type="button"
                   className="chip"
-                  aria-pressed={form.urgency === u.value}
-                  onClick={() => set("urgency", u.value)}
+                  aria-pressed={form.urgency === val}
+                  onClick={() => set("urgency", val)}
                 >
-                  <strong>{u.label}</strong>
-                  <span>{u.hint}</span>
+                  <strong>{f.urgencyLevels[i].label}</strong>
+                  <span>{f.urgencyLevels[i].hint}</span>
                 </button>
               ))}
             </div>
@@ -273,7 +270,7 @@ export default function RequestForm({
             <div
               className={`field step-pane ${errors.scheduledFor ? "field-error" : ""}`}
             >
-              <label htmlFor="when">When should the truck come?</label>
+              <label htmlFor="when">{f.scheduleLabel}</label>
               <input
                 id="when"
                 type="datetime-local"
@@ -290,7 +287,7 @@ export default function RequestForm({
         <div className="step-pane" key="s2">
           <div className="two-up">
             <div className={`field ${errors.name ? "field-error" : ""}`}>
-              <label htmlFor="name">Your name</label>
+              <label htmlFor="name">{f.nameLabel}</label>
               <input
                 id="name"
                 value={form.name}
@@ -300,14 +297,14 @@ export default function RequestForm({
               {errors.name && <p className="err">{errors.name}</p>}
             </div>
             <div className={`field ${errors.phone ? "field-error" : ""}`}>
-              <label htmlFor="phone">Phone</label>
+              <label htmlFor="phone">{f.phoneLabel}</label>
               <input
                 id="phone"
                 type="tel"
                 inputMode="tel"
                 value={form.phone}
                 onChange={(e) => set("phone", e.target.value)}
-                placeholder="0911 23 45 67"
+                placeholder={f.phonePlaceholder}
                 autoComplete="tel"
               />
               {errors.phone && <p className="err">{errors.phone}</p>}
@@ -315,12 +312,12 @@ export default function RequestForm({
           </div>
 
           <div className="field">
-            <label htmlFor="notes">Anything the driver should know?</label>
+            <label htmlFor="notes">{f.notesLabel}</label>
             <textarea
               id="notes"
               value={form.notes}
               onChange={(e) => set("notes", e.target.value)}
-              placeholder="Front wheel is bent, car is in an underground parking on level 2"
+              placeholder={f.notesPlaceholder}
             />
           </div>
 
@@ -340,23 +337,23 @@ export default function RequestForm({
             style={{ color: "var(--ink)", borderColor: "var(--line)" }}
             onClick={() => setStep((s) => s - 1)}
           >
-            Back
+            {f.back}
           </button>
         )}
         {step < totalSteps - 1 ? (
           <button type="button" className="btn btn-ink" onClick={next}>
-            Continue
+            {f.continue}
           </button>
         ) : (
           <button type="submit" className="btn btn-call" disabled={sending}>
-            {sending ? "Sending…" : "Send request"}
+            {sending ? f.sending : f.send}
           </button>
         )}
       </div>
 
       {variant === "compact" && (
         <p className="help" style={{ marginTop: "1rem" }}>
-          In a hurry? Calling {site.phoneDisplay} is always faster than typing.
+          {interpolate(f.compactHint, { phone: site.phoneDisplay })}
         </p>
       )}
     </form>

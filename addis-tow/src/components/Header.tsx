@@ -3,16 +3,19 @@
 import Link from "next/link";
 import { useState } from "react";
 import { site } from "@/lib/site";
-
-const links = [
-  { href: "/#services", label: "Services" },
-  { href: "/#coverage", label: "Where we go" },
-  { href: "/#pricing", label: "Prices" },
-  { href: "/#faq", label: "Questions" },
-];
+import { useLanguage } from "@/lib/i18n/LanguageProvider";
+import LanguageToggle from "@/lib/i18n/LanguageToggle";
 
 export default function Header() {
   const [open, setOpen] = useState(false);
+  const { t } = useLanguage();
+
+  const links = [
+    { href: "/#services", label: t.nav.services },
+    { href: "/#coverage", label: t.nav.coverage },
+    { href: "/#pricing", label: t.nav.pricing },
+    { href: "/#faq", label: t.nav.faq },
+  ];
 
   return (
     <header className="header">
@@ -40,10 +43,13 @@ export default function Header() {
           ))}
         </nav>
 
-        <a className="header-phone" href={`tel:${site.phone}`}>
-          <span className="pulse" aria-hidden="true" />
-          {site.phoneDisplay}
-        </a>
+        <div className="header-lang-wrap" style={{ display: "flex", alignItems: "center", gap: "1.1rem" }}>
+          <LanguageToggle />
+          <a className="header-phone" href={`tel:${site.phone}`}>
+            <span className="pulse" aria-hidden="true" />
+            {site.phoneDisplay}
+          </a>
+        </div>
 
         <button
           className="burger"
@@ -51,7 +57,7 @@ export default function Header() {
           aria-expanded={open}
           aria-controls="mobile-nav"
         >
-          {open ? "Close" : "Menu"}
+          {open ? t.nav.close : t.nav.menu}
         </button>
       </div>
 
@@ -66,8 +72,11 @@ export default function Header() {
           </Link>
         ))}
         <Link href="/request" onClick={() => setOpen(false)}>
-          Request a truck
+          {t.nav.requestTruck}
         </Link>
+        <div style={{ paddingTop: ".9rem" }}>
+          <LanguageToggle compact />
+        </div>
       </div>
 
       <div className="chevrons chevrons-thin" aria-hidden="true" />

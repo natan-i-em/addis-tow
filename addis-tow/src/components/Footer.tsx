@@ -1,7 +1,12 @@
+"use client";
+
 import Link from "next/link";
 import { site, services, areas } from "@/lib/site";
+import { useLanguage, interpolate } from "@/lib/i18n/LanguageProvider";
 
 export default function Footer() {
+  const { t } = useLanguage();
+
   return (
     <footer className="footer">
       <div className="chevrons" aria-hidden="true" style={{ marginBottom: "3rem" }} />
@@ -10,8 +15,10 @@ export default function Footer() {
           <div>
             <h4>{site.name}</h4>
             <p style={{ color: "inherit" }}>
-              {site.tagline} across {site.address.city}. Dispatch answers every
-              hour of the year.
+              {interpolate(t.footer.taglineLine, {
+                tagline: t.footer.tagline,
+                city: site.address.city,
+              })}
             </p>
             <p style={{ color: "inherit", margin: 0 }}>
               <a href={`tel:${site.phone}`} style={{ color: "var(--hi-vis)" }}>
@@ -23,29 +30,33 @@ export default function Footer() {
           </div>
 
           <div>
-            <h4>Services</h4>
+            <h4>{t.footer.servicesHeading}</h4>
             <ul>
               {services.slice(0, 6).map((s) => (
                 <li key={s.slug}>
-                  <Link href={`/services/${s.slug}`}>{s.name}</Link>
+                  <Link href={`/services/${s.slug}`}>
+                    {t.services.items[s.slug]?.name ?? s.name}
+                  </Link>
                 </li>
               ))}
             </ul>
           </div>
 
           <div>
-            <h4>Areas</h4>
+            <h4>{t.footer.areasHeading}</h4>
             <ul>
               {areas.slice(0, 6).map((a) => (
                 <li key={a.slug}>
-                  <Link href={`/towing/${a.slug}`}>Towing in {a.name}</Link>
+                  <Link href={`/towing/${a.slug}`}>
+                    {t.coverage.items[a.slug]?.name ?? a.name}
+                  </Link>
                 </li>
               ))}
             </ul>
           </div>
 
           <div>
-            <h4>Find us</h4>
+            <h4>{t.footer.findUsHeading}</h4>
             <address style={{ fontStyle: "normal" }}>
               {site.address.street}
               <br />
@@ -53,10 +64,10 @@ export default function Footer() {
             </address>
             <ul style={{ marginTop: "1rem" }}>
               <li>
-                <a href={site.telegram}>Telegram</a>
+                <a href={site.telegram}>{t.footer.telegram}</a>
               </li>
               <li>
-                <Link href="/request">Request a truck</Link>
+                <Link href="/request">{t.nav.requestTruck}</Link>
               </li>
             </ul>
           </div>
@@ -64,10 +75,13 @@ export default function Footer() {
 
         <div className="footer-base">
           <span>
-            © {new Date().getFullYear()} {site.legalName}. Operating since{" "}
-            {site.foundingYear}.
+            {interpolate(t.footer.sinceLine, {
+              year: String(new Date().getFullYear()),
+              legalName: site.legalName,
+              foundingYear: String(site.foundingYear),
+            })}
           </span>
-          <span>Open 24 hours, including public holidays.</span>
+          <span>{t.footer.openHoursLine}</span>
         </div>
       </div>
     </footer>

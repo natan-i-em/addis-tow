@@ -4,6 +4,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import ActionBar from "@/components/ActionBar";
 import JsonLd from "@/components/JsonLd";
+import { LanguageProvider } from "@/lib/i18n/LanguageProvider";
 import { businessSchema } from "@/lib/schema";
 import { site } from "@/lib/site";
 import "./globals.css";
@@ -88,10 +89,12 @@ export default function RootLayout({
         <a className="skip" href="#main">
           Skip to content
         </a>
-        <Header />
-        <main id="main">{children}</main>
-        <Footer />
-        <ActionBar />
+        <LanguageProvider>
+          <Header />
+          <main id="main">{children}</main>
+          <Footer />
+          <ActionBar />
+        </LanguageProvider>
         <JsonLd data={businessSchema()} />
       </body>
     </html>
