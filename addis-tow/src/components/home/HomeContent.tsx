@@ -1,22 +1,64 @@
 "use client";
 
+import { useEffect, useRef } from "react";
 import Link from "next/link";
 import Reveal from "@/components/Reveal";
 import Glyph from "@/components/Glyph";
 import Faq from "@/components/Faq";
+import Gallery from "@/components/Gallery";
 import RequestForm from "@/components/RequestForm";
 import { site, services, areas } from "@/lib/site";
 import { useLanguage, interpolate } from "@/lib/i18n/LanguageProvider";
 
+/** Moves the hero's amber glow to follow the pointer. Reads/writes CSS
+ *  custom properties directly via refs — no React state, so a mouse
+ *  moving across the hero never triggers a re-render. */
+function useHeroLight() {
+  const heroRef = useRef<HTMLElement>(null);
+  const lightRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const hero = heroRef.current;
+    const light = lightRef.current;
+    if (!hero || !light) return;
+
+    const reduceMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)"
+    ).matches;
+    const coarsePointer = window.matchMedia("(pointer: coarse)").matches;
+    if (reduceMotion || coarsePointer) return; // static fallback position stays
+
+    let frame = 0;
+    const onMove = (e: PointerEvent) => {
+      const rect = hero.getBoundingClientRect();
+      const x = ((e.clientX - rect.left) / rect.width) * 100;
+      const y = ((e.clientY - rect.top) / rect.height) * 100;
+      cancelAnimationFrame(frame);
+      frame = requestAnimationFrame(() => {
+        light.style.setProperty("--mx", `${x}%`);
+        light.style.setProperty("--my", `${y}%`);
+      });
+    };
+
+    hero.addEventListener("pointermove", onMove);
+    return () => {
+      hero.removeEventListener("pointermove", onMove);
+      cancelAnimationFrame(frame);
+    };
+  }, []);
+
+  return { heroRef, lightRef };
+}
+
 export default function HomeContent() {
   const { t } = useLanguage();
-
-  
+  const { heroRef, lightRef } = useHeroLight();
 
   return (
     <>
       {/* ---------------- hero ---------------- */}
-      <section className="hero">
+      <section className="hero" ref={heroRef}>
+        <div className="hero-light" ref={lightRef} aria-hidden="true" />
         <div className="shell hero-grid">
           <div>
             <p className="hero-status">
@@ -111,7 +153,7 @@ export default function HomeContent() {
               const copy = t.services.items[s.slug];
               return (
                 <Reveal key={s.slug} delay={i * 45}>
-                  <Link href={`/services/${s.slug}`} className="svc">
+                  <div className="svc">
                     <Glyph name={s.glyph} />
                     <h3>{copy?.name ?? s.name}</h3>
                     <p>{copy?.short ?? s.short}</p>
@@ -122,7 +164,7 @@ export default function HomeContent() {
                       </span>
                       <span className="svc-more">{t.services.detailsLink}</span>
                     </div>
-                  </Link>
+                  </div>
                 </Reveal>
               );
             })}
@@ -138,7 +180,7 @@ export default function HomeContent() {
             <p className="lede">{t.steps.sectionLede}</p>
           </Reveal>
           <div className="steps">
-            {t.steps.items.map((s: any, i: any) => (
+            {t.steps.items.map((s, i) => (
               <Reveal key={s.title} delay={i * 70} className="step">
                 <h3>{s.title}</h3>
                 <p>{s.body}</p>
@@ -160,7 +202,7 @@ export default function HomeContent() {
               const copy = t.coverage.items[a.slug];
               return (
                 <Reveal key={a.slug} delay={i * 40}>
-                  <Link href={`/towing/${a.slug}`} className="area">
+                  <div  className="area">
                     <h3>
                       {copy?.name ?? a.name}{" "}
                       <span className="eta">
@@ -168,7 +210,7 @@ export default function HomeContent() {
                       </span>
                     </h3>
                     <p>{a.nearby.join(" · ")}</p>
-                  </Link>
+                  </div>
                 </Reveal>
               );
             })}
@@ -227,13 +269,24 @@ export default function HomeContent() {
             <p className="lede">{t.safety.sectionLede}</p>
           </Reveal>
           <ul className="safety">
-            {t.safety.items.map((x: any, i: any) => (
+            {t.safety.items.map((x, i) => (
               <Reveal key={x.title} as="li" delay={i * 60}>
                 <h3>{x.title}</h3>
                 <p>{x.body}</p>
               </Reveal>
             ))}
           </ul>
+        </div>
+      </section>
+
+      {/* ---------------- gallery ---------------- */}
+      <section id="gallery">
+        <div className="shell">
+          <Reveal>
+            <h2>{t.gallery.sectionTitle}</h2>
+            <p className="lede">{t.gallery.sectionLede}</p>
+          </Reveal>
+          <Gallery />
         </div>
       </section>
 

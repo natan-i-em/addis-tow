@@ -14,6 +14,7 @@ export default function Header() {
     { href: "/#services", label: t.nav.services },
     { href: "/#coverage", label: t.nav.coverage },
     { href: "/#pricing", label: t.nav.pricing },
+    { href: "/#gallery", label: t.nav.gallery },
     { href: "/#faq", label: t.nav.faq },
   ];
 

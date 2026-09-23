@@ -30,6 +30,7 @@ type Dict = {
     coverage: string;
     pricing: string;
     faq: string;
+    gallery: string;
     menu: string;
     close: string;
     requestTruck: string;
@@ -73,6 +74,16 @@ type Dict = {
     payingP2: string;
   };
   safety: { sectionTitle: string; sectionLede: string; items: SafetyCopy[] };
+  gallery: {
+    sectionTitle: string;
+    sectionLede: string;
+    openLabel: string;
+    closeLabel: string;
+    prevLabel: string;
+    nextLabel: string;
+    videoBadge: string;
+    items: Record<string, string>; // id -> caption
+  };
   faq: { sectionTitle: string; items: FaqCopy[] };
   cta: { title: string; sub: string };
   footer: {
@@ -141,6 +152,7 @@ export const en: Dict = {
     coverage: "Where we go",
     pricing: "Prices",
     faq: "Questions",
+    gallery: "Gallery",
     menu: "Menu",
     close: "Close",
     requestTruck: "Request a truck",
@@ -181,19 +193,6 @@ export const en: Dict = {
           "Two cars on one bed for dealership and garage moves",
         ],
       },
-      "breakdown-recovery": {
-        name: "Breakdown recovery",
-        short: "Engine, gearbox or electrical failure on the road",
-        headline: "Car breakdown recovery, any hour",
-        description:
-          "If it will not start and will not move, we get it off the road and to the garage you choose — not the one that pays us.",
-        details: [
-          "Roadside diagnosis first — many cars are fixed on the spot",
-          "Recovery to your garage, your home, or ours",
-          "Ring road and Addis–Adama expressway covered",
-          "Night call-outs at the same rate as daytime",
-        ],
-      },
       "accident-recovery": {
         name: "Accident recovery",
         short: "Collision scenes, insurance paperwork, secure storage",
@@ -205,58 +204,6 @@ export const en: Dict = {
           "Works with Nyala, Awash, Ethio Life and other insurers",
           "Fenced, guarded yard with CCTV",
           "Debris cleared so traffic can move again",
-        ],
-      },
-      "jump-start": {
-        name: "Jump start",
-        short: "Flat battery, boosted at the roadside",
-        headline: "Flat battery jump start",
-        description:
-          "A technician on a motorbike reaches you faster than a truck. Most flat batteries are running again in under ten minutes.",
-        details: [
-          "Lithium jump packs — safe for modern ECUs",
-          "Battery and alternator tested before we leave",
-          "Replacement batteries carried for common models",
-          "Motorbike dispatch cuts the wait in traffic",
-        ],
-      },
-      "tire-change": {
-        name: "Tire change",
-        short: "Spare fitted, or a wheel taken for repair",
-        headline: "Roadside tire change and wheel repair",
-        description:
-          "We fit your spare where you stand. No spare? We take the wheel, get it patched, and bring it back fitted.",
-        details: [
-          "Torqued to the manufacturer's spec, not guessed",
-          "Locking wheel nut removal",
-          "Puncture repair run to the nearest gomista",
-          "Safe-stop guidance while you wait on the ring road",
-        ],
-      },
-      "fuel-delivery": {
-        name: "Fuel delivery",
-        short: "Benzene or naphtha brought to your car",
-        headline: "Emergency fuel delivery",
-        description:
-          "Ran dry between stations, or queued out of luck? We bring enough fuel in a sealed can to get you to the pump.",
-        details: [
-          "Benzene and naphtha, 5 or 10 litres",
-          "Sealed cans, fuel paid at pump price",
-          "Wrong-fuel drain and flush available",
-          "Diesel priming for cars that ran completely dry",
-        ],
-      },
-      "lockout-service": {
-        name: "Lockout service",
-        short: "Keys locked in, or lost entirely",
-        headline: "Car lockout and key recovery",
-        description:
-          "Opened without breaking glass or bending the door. Proof of ownership required before we touch the car.",
-        details: [
-          "Air wedge and long-reach tools, no damage",
-          "Libre and ID checked first, every time",
-          "Key cut and programmed for most models",
-          "Boot-release help when the latch fails",
         ],
       },
       "heavy-duty-towing": {
@@ -369,6 +316,25 @@ export const en: Dict = {
       },
     ],
   },
+  gallery: {
+    sectionTitle: "On the job",
+    sectionLede:
+      "Real recoveries from around the city — flatbed loads, night call-outs, and the odd tricky recovery.",
+    openLabel: "Open",
+    closeLabel: "Close",
+    prevLabel: "Previous",
+    nextLabel: "Next",
+    videoBadge: "Video",
+    items: {
+      "flatbed-bole": "Flatbed loading a sedan in Bole",
+      "breakdown-ring-road": "Breakdown recovery on the Ring Road, after dark",
+      "accident-cleanup": "Clearing an accident scene and recovering the vehicle",
+      "heavy-kality": "Heavy-duty recovery of a minibus in Kality",
+      "jump-start": "Jump-starting a flat battery at the roadside",
+      "tire-change": "Roadside tire change",
+      "flatbed-load-video": "Full flatbed loading sequence, start to finish",
+    },
+  },
   faq: {
     sectionTitle: "Questions people ask us",
     items: [
@@ -437,6 +403,7 @@ export const en: Dict = {
       "Pickup",
       "Truck / heavy",
       "Motorcycle",
+      "Electric Cars"
     ],
     locationLabel: "Where is the car?",
     locationPlaceholder: "Megenagna, in front of Zefmesh Grand Mall",
@@ -491,6 +458,7 @@ export const am: Dict = {
     coverage: "የምንደርስባቸው ቦታዎች",
     pricing: "ዋጋዎች",
     faq: "ጥያቄዎች",
+    gallery: "ጋለሪ",
     menu: "ዝርዝር",
     close: "ዝጋ",
     requestTruck: "መኪና ይጠይቁ",
@@ -531,19 +499,6 @@ export const am: Dict = {
           "ለአውቶሞቢል መደብር እና ጋራዥ እንቅስቃሴዎች ሁለት መኪኖች በአንድ መድረክ",
         ],
       },
-      "breakdown-recovery": {
-        name: "የብልሽት እርዳታ",
-        short: "በመንገድ ላይ የሞተር፣ የማርሽ ወይም የኤሌክትሪክ ብልሽት",
-        headline: "የመኪና ብልሽት እርዳታ፣ በማንኛውም ሰዓት",
-        description:
-          "ካልነሳ እና መንቀሳቀስ ካልቻለ፣ ከመንገድ አውጥተን ራስዎ ወደመረጡት ጋራዥ እንወስደዋለን — ለእኛ ወደሚከፍለን ጋራዥ አይደለም።",
-        details: [
-          "መጀመሪያ በመንገድ ላይ ምርመራ — ብዙ መኪኖች ባሉበት ቦታ ይጠገናሉ",
-          "ወደ ጋራዥዎ፣ ወደ ቤትዎ ወይም ወደኛ ማዳን",
-          "ቀለበት መንገድ እና የአዲስ አበባ–አዳማ ፍጥነት መንገድ ይሸፈናል",
-          "የሌሊት ጥሪዎች እንደ ቀን ተመሳሳይ ዋጋ",
-        ],
-      },
       "accident-recovery": {
         name: "የአደጋ እርዳታ",
         short: "የግጭት ቦታዎች፣ የኢንሹራንስ ወረቀት ስራ፣ ደህንነቱ የተጠበቀ ማከማቻ",
@@ -555,58 +510,6 @@ export const am: Dict = {
           "ከንያላ፣ አዋሽ፣ ኢትዮ ላይፍ እና ሌሎች ኢንሹራንሶች ጋር እንሰራለን",
           "በአጥር የተከበበ፣ በካሜራ የሚጠበቅ ግቢ",
           "ትራፊክ እንደገና እንዲንቀሳቀስ ፍርስራሽ ይጸዳል",
-        ],
-      },
-      "jump-start": {
-        name: "ጃምፕ ስታርት",
-        short: "የደከመ ባትሪ በመንገድ ላይ ይሞላል",
-        headline: "የደከመ ባትሪ ጃምፕ ስታርት",
-        description:
-          "በሞተር ሳይክል የሚመጣ ቴክኒሻን ከመኪና በበለጠ ፍጥነት ይደርስልዎታል። አብዛኞቹ የደከሙ ባትሪዎች በአስር ደቂቃ ውስጥ ይሰራሉ።",
-        details: [
-          "ለዘመናዊ ኮምፒውተር ደህንነታቸው የተጠበቀ ሊቲየም ጃምፕ ፓኮች",
-          "ከመልቀቃችን በፊት ባትሪ እና አልተርኔተር ይመረመራሉ",
-          "ለተለመዱ ሞዴሎች ምትክ ባትሪዎች ይያዛሉ",
-          "የሞተር ሳይክል ማዘዣ በትራፊክ ውስጥ መጠበቂያ ጊዜን ይቀንሳል",
-        ],
-      },
-      "tire-change": {
-        name: "የጎማ መቀየሪያ",
-        short: "መለዋወጫ ይገጠማል፣ ወይም ጎማ ለጥገና ይወሰዳል",
-        headline: "በመንገድ ላይ የጎማ መቀየሪያ እና ጥገና",
-        description:
-          "መለዋወጫዎን ባሉበት እንገጥማለን። መለዋወጫ ከሌለዎት? ጎማውን ወስደን አስጠግነን መልሰን እንገጥማለን።",
-        details: [
-          "እንደ አምራቹ መመሪያ የሚጠበብ፣ ግምት አይደለም",
-          "የተቆለፈ የጎማ ብሎን ማውጣት",
-          "የተበሳ ጎማ ጥገና ወደ ቅርቡ ጎማ ቤት",
-          "በቀለበት መንገድ ላይ ደህንነቱ የተጠበቀ አቆማ መመሪያ",
-        ],
-      },
-      "fuel-delivery": {
-        name: "የነዳጅ አቅርቦት",
-        short: "ቤንዚን ወይም ናፍጣ ወደ መኪናዎ ይመጣል",
-        headline: "የአስቸኳይ ጊዜ ነዳጅ አቅርቦት",
-        description:
-          "በጣቢያዎች መካከል ነዳጅ ካለቀብዎ ወይም በተራ ምክንያት ከቀሩ? በታሸገ ጀሪካን በቂ ነዳጅ አምጥተን ወደ ማደያ እንዲደርሱ እናደርጋለን።",
-        details: [
-          "ቤንዚን እና ናፍጣ፣ 5 ወይም 10 ሊትር",
-          "የታሸጉ ጀሪካኖች፣ ነዳጅ በማደያ ዋጋ ይከፈላል",
-          "የተሳሳተ ነዳጅ ማራገፍ እና ማጠብ ይገኛል",
-          "ሙሉ በሙሉ ላለቁ መኪኖች የናፍጣ ጅምር እርዳታ",
-        ],
-      },
-      "lockout-service": {
-        name: "የቁልፍ እርዳታ",
-        short: "ቁልፍ ውስጥ ተቆልፎ ቀርቷል፣ ወይም ሙሉ በሙሉ ጠፍቷል",
-        headline: "የመኪና ቁልፍ እርዳታ",
-        description:
-          "መስታወት ሳይሰበር እና በር ሳይታጠፍ ይከፈታል። መኪናውን ከመንካታችን በፊት የባለቤትነት ማረጋገጫ ያስፈልጋል።",
-        details: [
-          "የአየር ሽብልቅ እና ረጅም መሳሪያዎች፣ ምንም ጉዳት የለም",
-          "ሊብሬ እና መታወቂያ ሁልጊዜ አስቀድሞ ይረጋገጣል",
-          "ለአብዛኞቹ ሞዴሎች ቁልፍ ይቆረጣል እና ይታቀዳል",
-          "መቆለፊያ ሲበላሽ የሻንጣ በር መክፈቻ እርዳታ",
         ],
       },
       "heavy-duty-towing": {
@@ -718,6 +621,25 @@ export const am: Dict = {
       },
     ],
   },
+  gallery: {
+    sectionTitle: "በስራ ላይ",
+    sectionLede:
+      "ከከተማው ዙሪያ የተውጣጡ እውነተኛ ማዳኖች — ፍላትቤድ ጭነቶች፣ የሌሊት ጥሪዎች፣ እና አልፎ አልፎ አስቸጋሪ ማዳኖች።",
+    openLabel: "ክፈት",
+    closeLabel: "ዝጋ",
+    prevLabel: "ቀዳሚ",
+    nextLabel: "ቀጣይ",
+    videoBadge: "ቪዲዮ",
+    items: {
+      "flatbed-bole": "በቦሌ ውስጥ ሴዳን በፍላትቤድ ሲጫን",
+      "breakdown-ring-road": "በቀለበት መንገድ ላይ ከጨለማ በኋላ የብልሽት እርዳታ",
+      "accident-cleanup": "የአደጋ ቦታን ማጽዳት እና መኪናውን ማዳን",
+      "heavy-kality": "በቃሊቲ ውስጥ ሚኒባስ ከባድ ማዳን",
+      "jump-start": "በመንገድ ዳር የደከመ ባትሪ ጃምፕ ስታርት ማድረግ",
+      "tire-change": "በመንገድ ዳር የጎማ መቀየሪያ",
+      "flatbed-load-video": "ሙሉ የፍላትቤድ መጫኛ ቅደም ተከተል፣ ከመጀመሪያ እስከ መጨረሻ",
+    },
+  },
   faq: {
     sectionTitle: "ሰዎች የሚጠይቁን ጥያቄዎች",
     items: [
@@ -786,6 +708,7 @@ export const am: Dict = {
       "ፒክአፕ",
       "ከባድ መኪና",
       "ሞተር ሳይክል",
+      "ኤሌትሪክ መኪና"
     ],
     locationLabel: "መኪናው የት ነው?",
     locationPlaceholder: "መገናኛ፣ ከዘፍመሽ ግራንድ ሞል ፊት ለፊት",

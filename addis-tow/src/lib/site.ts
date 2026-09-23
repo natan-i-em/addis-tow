@@ -11,8 +11,9 @@ export const site = {
   description:
     "Flatbed towing, accident recovery, jump starts and roadside help across Addis Ababa. Call or send your location and a truck is on the way.",
   url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://addistow.com",
-  phone: "+251911000000",
-  phoneDisplay: "0911 00 00 00",
+  phone: "+251900628080",
+  phoneDisplay: " 0900 62 80 80",
+  alternetePhone: " 0906 05 04 03",
   telegram: "https://t.me/addistow",
   email: "dispatch@addistow.com",
   address: {
@@ -59,22 +60,6 @@ export const services: Service[] = [
     ],
   },
   {
-    slug: "breakdown-recovery",
-    name: "Breakdown recovery",
-    short: "Engine, gearbox or electrical failure on the road",
-    headline: "Car breakdown recovery, any hour",
-    description:
-      "If it will not start and will not move, we get it off the road and to the garage you choose — not the one that pays us.",
-    priceFrom: 2000,
-    glyph: "hook",
-    details: [
-      "Roadside diagnosis first — many cars are fixed on the spot",
-      "Recovery to your garage, your home, or ours",
-      "Ring road and Addis–Adama expressway covered",
-      "Night call-outs at the same rate as daytime",
-    ],
-  },
-  {
     slug: "accident-recovery",
     name: "Accident recovery",
     short: "Collision scenes, insurance paperwork, secure storage",
@@ -88,70 +73,6 @@ export const services: Service[] = [
       "Works with Nyala, Awash, Ethio Life and other insurers",
       "Fenced, guarded yard with CCTV",
       "Debris cleared so traffic can move again",
-    ],
-  },
-  {
-    slug: "jump-start",
-    name: "Jump start",
-    short: "Flat battery, boosted at the roadside",
-    headline: "Flat battery jump start",
-    description:
-      "A technician on a motorbike reaches you faster than a truck. Most flat batteries are running again in under ten minutes.",
-    priceFrom: 600,
-    glyph: "battery",
-    details: [
-      "Lithium jump packs — safe for modern ECUs",
-      "Battery and alternator tested before we leave",
-      "Replacement batteries carried for common models",
-      "Motorbike dispatch cuts the wait in traffic",
-    ],
-  },
-  {
-    slug: "tire-change",
-    name: "Tire change",
-    short: "Spare fitted, or a wheel taken for repair",
-    headline: "Roadside tire change and wheel repair",
-    description:
-      "We fit your spare where you stand. No spare? We take the wheel, get it patched, and bring it back fitted.",
-    priceFrom: 500,
-    glyph: "tire",
-    details: [
-      "Torqued to the manufacturer's spec, not guessed",
-      "Locking wheel nut removal",
-      "Puncture repair run to the nearest gomista",
-      "Safe-stop guidance while you wait on the ring road",
-    ],
-  },
-  {
-    slug: "fuel-delivery",
-    name: "Fuel delivery",
-    short: "Benzene or naphtha brought to your car",
-    headline: "Emergency fuel delivery",
-    description:
-      "Ran dry between stations, or queued out of luck? We bring enough fuel in a sealed can to get you to the pump.",
-    priceFrom: 700,
-    glyph: "fuel",
-    details: [
-      "Benzene and naphtha, 5 or 10 litres",
-      "Sealed cans, fuel paid at pump price",
-      "Wrong-fuel drain and flush available",
-      "Diesel priming for cars that ran completely dry",
-    ],
-  },
-  {
-    slug: "lockout-service",
-    name: "Lockout service",
-    short: "Keys locked in, or lost entirely",
-    headline: "Car lockout and key recovery",
-    description:
-      "Opened without breaking glass or bending the door. Proof of ownership required before we touch the car.",
-    priceFrom: 900,
-    glyph: "key",
-    details: [
-      "Air wedge and long-reach tools, no damage",
-      "Libre and ID checked first, every time",
-      "Key cut and programmed for most models",
-      "Boot-release help when the latch fails",
     ],
   },
   {
@@ -300,6 +221,7 @@ export const vehicleTypes = [
   "Pickup",
   "Truck / heavy",
   "Motorcycle",
+  "Electric Cars"
 ] as const;
 
 export const urgencyLevels = [
