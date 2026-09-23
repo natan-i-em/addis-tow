@@ -23,7 +23,7 @@ export default function ActionBar() {
       <a className="call" href={`tel:${site.phone}`}>
         {interpolate(t.actionbar.call, { phone: site.phoneDisplay })}
       </a>
-      <Link className="req" href="/request">
+      <Link className="req" href="#top">
         {t.actionbar.request}
       </Link>
     </div>
