@@ -57,12 +57,14 @@ export default function Footer() {
 
           <div>
             <h4>{t.footer.findUsHeading}</h4>
-            <address style={{ fontStyle: "normal" }}>
-              {site.address.street}
-              <br />
-              {site.address.city}, Ethiopia
-            </address>
+
             <ul style={{ marginTop: "1rem" }}>
+              <li>
+                <a href={site.telegram}>{t.footer.telegram}</a>
+              </li>
+              <li>
+                <a href={site.telegram}>{t.footer.telegram}</a>
+              </li>
               <li>
                 <a href={site.telegram}>{t.footer.telegram}</a>
               </li>
