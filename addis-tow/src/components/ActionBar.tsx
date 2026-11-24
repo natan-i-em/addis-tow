@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Link from "next/link";
 import { site } from "@/lib/site";
 import { useLanguage, interpolate } from "@/lib/i18n/LanguageProvider";
 
@@ -23,9 +22,6 @@ export default function ActionBar() {
       <a className="call" href={`tel:${site.phone}`}>
         {interpolate(t.actionbar.call, { phone: site.phoneDisplay })}
       </a>
-      <Link className="req" href="#top">
-        {t.actionbar.request}
-      </Link>
     </div>
   );
 }

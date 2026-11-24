@@ -25,10 +25,6 @@ export default function Footer() {
                 {site.phoneDisplay}
               </a>
               <br />
-              <a href={`tel:${site.alternetePhone}`} style={{ color: "var(--hi-vis)" }}>
-                {site.alternetePhone}
-              </a>
-              <br />
               <a href={`mailto:${site.email}`}>{site.email}</a>
             </p>
           </div>
@@ -37,8 +33,10 @@ export default function Footer() {
             <h4>{t.footer.servicesHeading}</h4>
             <ul>
               {services.slice(0, 6).map((s) => (
-                <li key={s.slug}>                 
-                    {t.services.items[s.slug]?.name ?? s.name}                 
+                <li key={s.slug}>
+                  <Link href={`/services/${s.slug}`}>
+                    {t.services.items[s.slug]?.name ?? s.name}
+                  </Link>
                 </li>
               ))}
             </ul>
@@ -48,8 +46,10 @@ export default function Footer() {
             <h4>{t.footer.areasHeading}</h4>
             <ul>
               {areas.slice(0, 6).map((a) => (
-                <li key={a.slug}>       
+                <li key={a.slug}>
+                  <Link href={`/towing/${a.slug}`}>
                     {t.coverage.items[a.slug]?.name ?? a.name}
+                  </Link>
                 </li>
               ))}
             </ul>
@@ -65,9 +65,6 @@ export default function Footer() {
             <ul style={{ marginTop: "1rem" }}>
               <li>
                 <a href={site.telegram}>{t.footer.telegram}</a>
-              </li>
-              <li>
-                <Link href="#top">{t.nav.requestTruck}</Link>
               </li>
             </ul>
           </div>

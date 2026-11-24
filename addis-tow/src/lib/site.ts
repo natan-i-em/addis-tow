@@ -5,17 +5,17 @@
  */
 
 export const site = {
-  name: "Addis Tow",
-  legalName: "Addis Tow Recovery PLC",
+  name: "Rapid Tow Truck",
+  legalName: "Rapid Tow Truck", 
   tagline: "24/7 towing and roadside recovery",
   description:
     "Flatbed towing, accident recovery, jump starts and roadside help across Addis Ababa. Call or send your location and a truck is on the way.",
-  url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://addistow.com",
+  url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://rapidtow.com",
   phone: "+251900628080",
   phoneDisplay: " 0900 62 80 80",
   alternetePhone: " 0906 05 04 03",
-  telegram: "https://t.me/addistow",
-  email: "dispatch@addistow.com",
+  telegram: "https://t.me/rapidtow",
+  email: "dispatch@rapidtow.com",
   address: {
     street: "Bole Road, Behind Getu Commercial Center",
     city: "Addis Ababa",

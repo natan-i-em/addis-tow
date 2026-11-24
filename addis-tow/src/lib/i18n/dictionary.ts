@@ -33,7 +33,6 @@ type Dict = {
     gallery: string;
     menu: string;
     close: string;
-    requestTruck: string;
   };
   hero: {
     status: string; // {trucks} placeholder
@@ -41,7 +40,7 @@ type Dict = {
     h1b: string;
     sub: string;
     callBtn: string; // {phone} placeholder
-    requestBtn: string;
+    servicesBtn: string;
     factEtaLabel: string;
     fact247: string;
     fact247Label: string;
@@ -53,6 +52,7 @@ type Dict = {
     sectionTitle: string;
     sectionLede: string;
     priceFromSuffix: string;
+    priceFrom: string; // {price}
     startingPrice: string;
     detailsLink: string;
     otherTitle: string;
@@ -84,6 +84,11 @@ type Dict = {
     videoBadge: string;
     items: Record<string, string>; // id -> caption
   };
+  videoGallery: {
+    sectionTitle: string;
+    sectionLede: string;
+    items: Record<string, string>; // id -> caption
+  };
   faq: { sectionTitle: string; items: FaqCopy[] };
   cta: { title: string; sub: string };
   footer: {
@@ -96,53 +101,7 @@ type Dict = {
     openHoursLine: string;
     sinceLine: string; // {year} {foundingYear}
   };
-  actionbar: { call: string; request: string }; // {phone}
-  form: {
-    stepOf: string; // {n} {total}
-    stepNames: string[];
-    serviceLabel: string;
-    servicePlaceholder: string;
-    notSure: string;
-    priceFromOption: string; // {price}
-    vehicleLabel: string;
-    vehiclePlaceholder: string;
-    vehicleTypes: string[];
-    locationLabel: string;
-    locationPlaceholder: string;
-    locationHelp: string;
-    useGps: string;
-    locating: string;
-    pinAttached: string;
-    urgencyLabel: string;
-    urgencyLevels: { label: string; hint: string }[];
-    scheduleLabel: string;
-    nameLabel: string;
-    phoneLabel: string;
-    phonePlaceholder: string;
-    notesLabel: string;
-    notesPlaceholder: string;
-    back: string;
-    continue: string;
-    send: string;
-    sending: string;
-    successTitle: string;
-    successBody: string; // {eta}
-    callDispatch: string;
-    sendAnother: string;
-    compactHint: string; // {phone}
-    errors: {
-      service: string;
-      vehicle: string;
-      location: string;
-      urgency: string;
-      schedule: string;
-      name: string;
-      phone: string;
-      locationBlocked: string;
-      geoUnsupported: string;
-      submitFailed: string; // {phone}
-    };
-  };
+  actionbar: { call: string }; // {phone}
 };
 
 // Keys must match the `slug` fields in src/lib/site.ts exactly.
@@ -155,7 +114,6 @@ export const en: Dict = {
     gallery: "Gallery",
     menu: "Menu",
     close: "Close",
-    requestTruck: "Request a truck",
   },
   hero: {
     status: "Dispatch open now · {trucks} trucks on shift",
@@ -163,19 +121,20 @@ export const en: Dict = {
     h1b: "in {city}?",
     sub: "Tell us the nearest landmark and a truck starts moving. You get the driver's name, his plate number, and the price — before he sets off.",
     callBtn: "Call {phone}",
-    requestBtn: "Request a truck",
+    servicesBtn: "See our services",
     factEtaLabel: "Average arrival inside the ring road",
     fact247: "24/7",
     fact247Label: "Night calls cost the same as day calls",
     factYearsLabel: "Recovering cars across the city",
-    quickTitle: "Request a truck",
-    quickHint: "Three short steps. No account, no payment up front.",
+    quickTitle: "Call dispatch",
+    quickHint: "A real person answers, day or night. Tell us the nearest landmark and a truck starts moving.",
   },
   services: {
     sectionTitle: "What we get called for",
     sectionLede:
       "Most calls end one of two ways: fixed where you stand, or loaded and taken to the garage you name.",
     priceFromSuffix: "birr",
+    priceFrom: "from {price} birr",
     startingPrice: "starting price",
     detailsLink: "Details",
     otherTitle: "Other things we handle",
@@ -332,7 +291,21 @@ export const en: Dict = {
       "heavy-kality": "Heavy-duty recovery of a minibus in Kality",
       "jump-start": "Jump-starting a flat battery at the roadside",
       "tire-change": "Roadside tire change",
-      "flatbed-load-video": "Full flatbed loading sequence, start to finish",
+    },
+  },
+  videoGallery: {
+    sectionTitle: "Videos",
+    sectionLede:
+      "Short clips from real jobs — loading, lifting, and the odd tricky recovery, start to finish.",
+    items: {
+      "flatbed-load-video": "Flatbed loading, start to finish",
+      "accident-clearance-video": "Clearing an accident scene",
+      "heavy-lift-video": "Heavy-duty lift in Kality",
+      "night-recovery-video": "Night recovery on the Ring Road",
+      "dispatch-call-video": "A dispatch call, start to finish",
+      "customer-dropoff-video": "Delivering a car to the customer",
+      "behind-scenes-video": "Behind the scenes at the yard",
+      "fleet-walkaround-video": "A walk around the truck fleet",
     },
   },
   faq: {
@@ -386,70 +359,7 @@ export const en: Dict = {
     openHoursLine: "Open 24 hours, including public holidays.",
     sinceLine: "© {year} {legalName}. Operating since {foundingYear}.",
   },
-  actionbar: { call: "Call {phone}", request: "Request a truck" },
-  form: {
-    stepOf: "Step {n} of {total}",
-    stepNames: ["What happened", "Where you are", "How to reach you"],
-    serviceLabel: "What do you need?",
-    servicePlaceholder: "Choose a service",
-    notSure: "Not sure — help me work it out",
-    priceFromOption: "from {price} birr",
-    vehicleLabel: "What are you driving?",
-    vehiclePlaceholder: "Choose a vehicle type",
-    vehicleTypes: [
-      "Sedan / hatchback",
-      "SUV / 4x4",
-      "Minibus / van",
-      "Pickup",
-      "Truck / heavy",
-      "Motorcycle",
-      "Electric Cars"
-    ],
-    locationLabel: "Where is the car?",
-    locationPlaceholder: "Megenagna, in front of Zefmesh Grand Mall",
-    locationHelp: "A landmark beats an address here.",
-    useGps: "Use my GPS location",
-    locating: "Finding you…",
-    pinAttached: " ✓ pin attached",
-    urgencyLabel: "How is the car sitting?",
-    urgencyLevels: [
-      { label: "Blocking traffic", hint: "We prioritise this" },
-      { label: "Unsafe spot", hint: "Highway or no shoulder" },
-      { label: "Safely parked", hint: "Standard dispatch" },
-      { label: "Schedule for later", hint: "Pick a time" },
-    ],
-    scheduleLabel: "When should the truck come?",
-    nameLabel: "Your name",
-    phoneLabel: "Phone",
-    phonePlaceholder: "0911 23 45 67",
-    notesLabel: "Anything the driver should know?",
-    notesPlaceholder:
-      "Front wheel is bent, car is in an underground parking on level 2",
-    back: "Back",
-    continue: "Continue",
-    send: "Send request",
-    sending: "Sending…",
-    successTitle: "A truck is being assigned",
-    successBody:
-      "Dispatch is calling you in the next few minutes to confirm the price. Estimated arrival is about {eta} minutes once the driver sets off.",
-    callDispatch: "Call dispatch now",
-    sendAnother: "Send another request",
-    compactHint: "In a hurry? Calling {phone} is always faster than typing.",
-    errors: {
-      service: "Pick the help you need.",
-      vehicle: "Tell us what you drive.",
-      location: "A landmark is enough — 'Bole, opposite Edna Mall'.",
-      urgency: "Choose how the car is sitting right now.",
-      schedule: "Pick a date and time.",
-      name: "We need a name for the driver.",
-      phone: "Enter a working Ethiopian mobile number.",
-      locationBlocked: "Location was blocked. Type the nearest landmark instead.",
-      geoUnsupported:
-        "This browser cannot share location. Type a landmark instead.",
-      submitFailed:
-        "We could not send that. Call {phone} and dispatch will take the details.",
-    },
-  },
+  actionbar: { call: "Call {phone}" },
 };
 
 export const am: Dict = {
@@ -461,7 +371,6 @@ export const am: Dict = {
     gallery: "ጋለሪ",
     menu: "ዝርዝር",
     close: "ዝጋ",
-    requestTruck: "መኪና ይጠይቁ",
   },
   hero: {
     status: "ማዘዣ አሁን ክፍት ነው · {trucks} መኪኖች በስራ ላይ",
@@ -469,19 +378,20 @@ export const am: Dict = {
     h1b: "{city} ውስጥ?",
     sub: "በአቅራቢያዎ ያለውን ምልክት ይንገሩን፣ መኪናው ወዲያውኑ ይነሳል። የአሽከርካሪውን ስም፣ የሰሌዳ ቁጥር እና ዋጋ ከመንቀሳቀሱ በፊት ያገኛሉ።",
     callBtn: "ይደውሉ {phone}",
-    requestBtn: "መኪና ይጠይቁ",
+    servicesBtn: "አገልግሎቶቻችንን ይመልከቱ",
     factEtaLabel: "አማካይ የመድረሻ ጊዜ በቀለበት መንገድ ውስጥ",
     fact247: "24/7",
     fact247Label: "የሌሊት ጥሪዎች እንደ ቀን ጥሪዎች ተመሳሳይ ዋጋ አላቸው",
     factYearsLabel: "በከተማው ውስጥ መኪኖችን ሲያድኑ የቆዩ ዓመታት",
-    quickTitle: "መኪና ይጠይቁ",
-    quickHint: "ሶስት አጭር ደረጃዎች። መለያ አያስፈልግም፣ ቅድሚያ ክፍያ የለም።",
+    quickTitle: "ማዘዣን ይደውሉ",
+    quickHint: "ሰው ያነሳል፣ ቀንም ሌሊትም። በአቅራቢያዎ ያለውን ምልክት ይንገሩን፣ መኪናው ይነሳል።",
   },
   services: {
     sectionTitle: "ለምን እንደሚደውሉልን",
     sectionLede:
       "አብዛኞቹ ጥሪዎች በሁለት መንገዶች ያበቃሉ፦ በቆሙበት ቦታ ይጠገናል፣ ወይም ተጭኖ እርስዎ ወደሚሉት ጋራዥ ይወሰዳል።",
     priceFromSuffix: "ብር",
+    priceFrom: "ከ{price} ብር ጀምሮ",
     startingPrice: "መነሻ ዋጋ",
     detailsLink: "ዝርዝር",
     otherTitle: "ሌሎች የምናደርጋቸው ነገሮች",
@@ -637,7 +547,21 @@ export const am: Dict = {
       "heavy-kality": "በቃሊቲ ውስጥ ሚኒባስ ከባድ ማዳን",
       "jump-start": "በመንገድ ዳር የደከመ ባትሪ ጃምፕ ስታርት ማድረግ",
       "tire-change": "በመንገድ ዳር የጎማ መቀየሪያ",
-      "flatbed-load-video": "ሙሉ የፍላትቤድ መጫኛ ቅደም ተከተል፣ ከመጀመሪያ እስከ መጨረሻ",
+    },
+  },
+  videoGallery: {
+    sectionTitle: "ቪዲዮዎች",
+    sectionLede:
+      "ከእውነተኛ ስራዎች የተወሰዱ አጭር ቪዲዮዎች — ጭነት፣ ማንሳት፣ እና አልፎ አልፎ አስቸጋሪ ማዳኖች፣ ከመጀመሪያ እስከ መጨረሻ።",
+    items: {
+      "flatbed-load-video": "የፍላትቤድ ጭነት፣ ከመጀመሪያ እስከ መጨረሻ",
+      "accident-clearance-video": "የአደጋ ቦታን ማጽዳት",
+      "heavy-lift-video": "በቃሊቲ ውስጥ ከባድ ማንሳት",
+      "night-recovery-video": "በቀለበት መንገድ ላይ የሌሊት እርዳታ",
+      "dispatch-call-video": "የማዘዣ ጥሪ፣ ከመጀመሪያ እስከ መጨረሻ",
+      "customer-dropoff-video": "መኪናን ለደንበኛ ማድረስ",
+      "behind-scenes-video": "በግቢው ውስጥ ከመጋረጃ ጀርባ",
+      "fleet-walkaround-video": "በመኪኖች መርከቦች ዙሪያ የእግር ጉዞ",
     },
   },
   faq: {
@@ -691,67 +615,7 @@ export const am: Dict = {
     openHoursLine: "24 ሰዓት ክፍት፣ የህዝብ በዓላትን ጨምሮ።",
     sinceLine: "© {year} {legalName}። ከ{foundingYear} ጀምሮ በስራ ላይ።",
   },
-  actionbar: { call: "ይደውሉ {phone}", request: "መኪና ይጠይቁ" },
-  form: {
-    stepOf: "ደረጃ {n} ከ{total}",
-    stepNames: ["ምን እንደተከሰተ", "የት እንዳሉ", "እንዴት እንደሚደርስዎት"],
-    serviceLabel: "ምን ያስፈልግዎታል?",
-    servicePlaceholder: "አገልግሎት ይምረጡ",
-    notSure: "እርግጠኛ አይደለሁም — እርዱኝ",
-    priceFromOption: "ከ{price} ብር ጀምሮ",
-    vehicleLabel: "ምን አይነት መኪና ነው የሚነዱት?",
-    vehiclePlaceholder: "የመኪና አይነት ይምረጡ",
-    vehicleTypes: [
-      "ሴዳን / ሃችባክ",
-      "ኤስዩቪ / 4x4",
-      "ሚኒባስ / ቫን",
-      "ፒክአፕ",
-      "ከባድ መኪና",
-      "ሞተር ሳይክል",
-      "ኤሌትሪክ መኪና"
-    ],
-    locationLabel: "መኪናው የት ነው?",
-    locationPlaceholder: "መገናኛ፣ ከዘፍመሽ ግራንድ ሞል ፊት ለፊት",
-    locationHelp: "እዚህ ምልክት ከአድራሻ ይሻላል።",
-    useGps: "የኔን ጂፒኤስ አካባቢ ይጠቀሙ",
-    locating: "እየፈለግንዎ ነው…",
-    pinAttached: " ✓ ምልክት ተያይዟል",
-    urgencyLabel: "መኪናው እንዴት ነው ያለው?",
-    urgencyLevels: [
-      { label: "ትራፊክ እያገደ ነው", hint: "ለዚህ ቅድሚያ እንሰጣለን" },
-      { label: "ደህንነቱ ያልተጠበቀ ቦታ", hint: "አውራ ጎዳና ወይም መስመር ዳር የለም" },
-      { label: "በደህና ቆሟል", hint: "መደበኛ ማዘዣ" },
-      { label: "ለኋላ ያስይዙ", hint: "ሰዓት ይምረጡ" },
-    ],
-    scheduleLabel: "መኪናው መቼ መምጣት አለበት?",
-    nameLabel: "ስምዎ",
-    phoneLabel: "ስልክ",
-    phonePlaceholder: "0911 23 45 67",
-    notesLabel: "አሽከርካሪው ማወቅ ያለበት ነገር አለ?",
-    notesPlaceholder: "የፊት ጎማ ጎበጥ ብሏል፣ መኪናው በምድር ውስጥ ማቆሚያ ደረጃ 2 ላይ ነው",
-    back: "ተመለስ",
-    continue: "ቀጥል",
-    send: "ጥያቄ ላክ",
-    sending: "እየላከ ነው…",
-    successTitle: "መኪና እየተመደበ ነው",
-    successBody:
-      "ማዘዣ ዋጋውን ለማረጋገጥ በሚቀጥሉት ደቂቃዎች ውስጥ ይደውልልዎታል። አሽከርካሪው ከተነሳ በኋላ የሚደርስበት ግምታዊ ጊዜ {eta} ደቂቃ ያህል ነው።",
-    callDispatch: "አሁን ማዘዣን ይደውሉ",
-    sendAnother: "ሌላ ጥያቄ ላክ",
-    compactHint: "ቸኩለዋል? {phone} መደወል ሁልጊዜ ከመተየብ ይፈጥናል።",
-    errors: {
-      service: "የሚያስፈልግዎትን እርዳታ ይምረጡ።",
-      vehicle: "ምን እንደሚነዱ ይንገሩን።",
-      location: "አንድ ምልክት በቂ ነው — 'ቦሌ፣ ከኤድና ሞል ትይዩ'።",
-      urgency: "መኪናው አሁን እንዴት እንዳለ ይምረጡ።",
-      schedule: "ቀን እና ሰዓት ይምረጡ።",
-      name: "ለአሽከርካሪው ስም እንፈልጋለን።",
-      phone: "የሚሰራ የኢትዮጵያ ስልክ ቁጥር ያስገቡ።",
-      locationBlocked: "አካባቢ ተከልክሏል። በምትኩ የቅርቡን ምልክት ይተይቡ።",
-      geoUnsupported: "ይህ አሳሽ አካባቢን ማጋራት አይችልም። በምትኩ ምልክት ይተይቡ።",
-      submitFailed: "ያንን መላክ አልቻልንም። {phone} ይደውሉ ማዘዣው ዝርዝሩን ይወስዳል።",
-    },
-  },
+  actionbar: { call: "ይደውሉ {phone}" },
 } satisfies Dict;
 
 export const dictionaries: Record<Lang, Dict> = { en, am };

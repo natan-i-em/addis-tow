@@ -11,7 +11,7 @@ export default function LanguageToggle({ compact = false }: { compact?: boolean 
       aria-label="Language / ቋንቋ"
       style={{
         display: "inline-flex",
-        border: "1px solid var(--asphalt-3)",
+        border: "1px solid var(--line)",
         borderRadius: "2px",
         overflow: "hidden",
         fontFamily: "var(--font-condensed)",
@@ -29,7 +29,7 @@ export default function LanguageToggle({ compact = false }: { compact?: boolean 
             cursor: "pointer",
             padding: compact ? "0.5rem 0.8rem" : "0.35rem 0.65rem",
             background: lang === l ? "var(--hi-vis)" : "transparent",
-            color: lang === l ? "var(--ink)" : "var(--muted-dark)",
+            color: lang === l ? "var(--ink)" : "var(--muted)",
             fontWeight: 700,
           }}
         >

@@ -72,7 +72,7 @@ export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
   viewportFit: "cover",
-  themeColor: "#1A1D21",
+  themeColor: "#F6F5F2",
 };
 
 export default function RootLayout({
@@ -81,7 +81,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en-ET" className={`${base.variable} ${condensed.variable}`}>
+    <html
+      lang="en-ET"
+      className={`${base.variable} ${condensed.variable}`}
+      suppressHydrationWarning
+    >
       <head>
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
       </head>

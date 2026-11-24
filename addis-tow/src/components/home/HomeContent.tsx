@@ -1,12 +1,13 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import Reveal from "@/components/Reveal";
 import Glyph from "@/components/Glyph";
 import Faq from "@/components/Faq";
 import Gallery from "@/components/Gallery";
-import RequestForm from "@/components/RequestForm";
+import VideoGrid from "@/components/VideoGrid";
 import { site, services, areas } from "@/lib/site";
 import { useLanguage, interpolate } from "@/lib/i18n/LanguageProvider";
 
@@ -78,8 +79,8 @@ export default function HomeContent() {
               <a className="btn btn-call" href={`tel:${site.phone}`}>
                 {interpolate(t.hero.callBtn, { phone: site.phoneDisplay })}
               </a>
-              <a className="btn btn-ghost" href="#request">
-                {t.hero.requestBtn}
+              <a className="btn btn-ghost" href="#services">
+                {t.hero.servicesBtn}
               </a>
             </div>
 
@@ -99,10 +100,20 @@ export default function HomeContent() {
             </dl>
           </div>
 
-          <div className="card-quick" id="request">
+          <div className="card-quick hero-call">
+            <Image
+              className="hero-logo"
+              src="/hero-logo.png"
+              alt={site.name}
+              width={1024}
+              height={683}
+              priority
+            />
             <h2>{t.hero.quickTitle}</h2>
             <p className="hint">{t.hero.quickHint}</p>
-            <RequestForm variant="compact" />
+            <a className="btn btn-call btn-block hero-call-btn" href={`tel:${site.phone}`}>
+              {site.phoneDisplay}
+            </a>
           </div>
         </div>
 
@@ -153,7 +164,7 @@ export default function HomeContent() {
               const copy = t.services.items[s.slug];
               return (
                 <Reveal key={s.slug} delay={i * 45}>
-                  <div className="svc">
+                  <Link href={`/services/${s.slug}`} className="svc">
                     <Glyph name={s.glyph} />
                     <h3>{copy?.name ?? s.name}</h3>
                     <p>{copy?.short ?? s.short}</p>
@@ -164,7 +175,7 @@ export default function HomeContent() {
                       </span>
                       <span className="svc-more">{t.services.detailsLink}</span>
                     </div>
-                  </div>
+                  </Link>
                 </Reveal>
               );
             })}
@@ -202,7 +213,7 @@ export default function HomeContent() {
               const copy = t.coverage.items[a.slug];
               return (
                 <Reveal key={a.slug} delay={i * 40}>
-                  <div  className="area">
+                  <Link href={`/towing/${a.slug}`} className="area">
                     <h3>
                       {copy?.name ?? a.name}{" "}
                       <span className="eta">
@@ -210,7 +221,7 @@ export default function HomeContent() {
                       </span>
                     </h3>
                     <p>{a.nearby.join(" · ")}</p>
-                  </div>
+                  </Link>
                 </Reveal>
               );
             })}
@@ -241,7 +252,7 @@ export default function HomeContent() {
                   >
                     <span>{copy?.name ?? s.name}</span>
                     <strong>
-                      {interpolate(t.form.priceFromOption, {
+                      {interpolate(t.services.priceFrom, {
                         price: s.priceFrom.toLocaleString(),
                       })}
                     </strong>
@@ -287,6 +298,17 @@ export default function HomeContent() {
             <p className="lede">{t.gallery.sectionLede}</p>
           </Reveal>
           <Gallery />
+        </div>
+      </section>
+
+      {/* ---------------- video gallery ---------------- */}
+      <section id="gallery-videos" style={{ background: "var(--concrete)" }}>
+        <div className="shell">
+          <Reveal>
+            <h2>{t.videoGallery.sectionTitle}</h2>
+            <p className="lede">{t.videoGallery.sectionLede}</p>
+          </Reveal>
+          <VideoGrid />
         </div>
       </section>
 

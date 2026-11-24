@@ -21,7 +21,8 @@ export function businessSchema() {
     email: site.email,
     priceRange: "ETB 500 – 25,000",
     foundingDate: String(site.foundingYear),
-    image: id("/opengraph-image"),
+    image: id("/logo.png"),
+    logo: id("/logo.png"),
     address: {
       "@type": "PostalAddress",
       streetAddress: site.address.street,

@@ -3,6 +3,8 @@
 import { useEffect, useRef, useState } from "react";
 import { gallery } from "@/lib/gallery-data";
 import { useLanguage } from "@/lib/i18n/LanguageProvider";
+import Lightbox from "@/components/Lightbox";
+import { GalleryItem } from "@/lib/gallery-data";
 
 const VISIBLE_RANGE = 3; // items further than this from center are hidden
 const AUTOPLAY_MS = 4200;
@@ -23,7 +25,6 @@ export default function Gallery() {
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [paused, setPaused] = useState(false);
   const stageRef = useRef<HTMLDivElement>(null);
-  const videoRefs = useRef<Record<number, HTMLVideoElement | null>>({});
   const pointer = useRef<{ x: number; dragging: boolean }>({ x: 0, dragging: false });
 
   const length = gallery.length;
@@ -40,31 +41,6 @@ export default function Gallery() {
     return () => clearInterval(id);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [paused, lightboxOpen, active]);
-
-  // Only the centered card's video actually plays.
-  useEffect(() => {
-    Object.entries(videoRefs.current).forEach(([i, el]) => {
-      if (!el) return;
-      if (Number(i) === active) el.play().catch(() => {});
-      else el.pause();
-    });
-  }, [active]);
-
-  useEffect(() => {
-    if (!lightboxOpen) return;
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") setLightboxOpen(false);
-      if (e.key === "ArrowRight") advance(1);
-      if (e.key === "ArrowLeft") advance(-1);
-    };
-    window.addEventListener("keydown", onKey);
-    document.body.style.overflow = "hidden";
-    return () => {
-      window.removeEventListener("keydown", onKey);
-      document.body.style.overflow = "";
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [lightboxOpen]);
 
   function onPointerDown(e: React.PointerEvent) {
     pointer.current = { x: e.clientX, dragging: true };
@@ -104,7 +80,7 @@ export default function Gallery() {
         </button>
 
         <div className="gallery-track">
-          {gallery.map((item, i) => {
+          {gallery.map((item: GalleryItem, i: number) => {
             const offset = shortestOffset(i, active, length);
             const abs = Math.abs(offset);
             const isActive = offset === 0;
@@ -138,30 +114,7 @@ export default function Gallery() {
                 aria-current={isActive}
                 tabIndex={hidden ? -1 : 0}
               >
-                {item.type === "video" ? (
-                  <video
-                    ref={(el) => {
-                      videoRefs.current[i] = el;
-                    }}
-                    src={item.src}
-                    poster={item.poster}
-                    muted
-                    loop
-                    playsInline
-                    preload="metadata"
-                    aria-hidden="true"
-                  />
-                ) : (
-                  <img src={item.src} alt="" loading="lazy" />
-                )}
-                {item.type === "video" && (
-                  <span className="gallery-play" aria-hidden="true">
-                    <svg width="44" height="44" viewBox="0 0 52 52">
-                      <circle cx="26" cy="26" r="25" fill="rgba(10,11,12,.55)" stroke="#fff" />
-                      <path d="M21 16l16 10-16 10z" fill="#fff" />
-                    </svg>
-                  </span>
-                )}
+                <img src={item.src} alt="" loading="lazy" />
               </button>
             );
           })}
@@ -180,7 +133,7 @@ export default function Gallery() {
       <p className="gallery-caption-active">{captionFor(current.id, current.alt)}</p>
 
       <div className="gallery-dots">
-        {gallery.map((item, i) => (
+        {gallery.map((item: GalleryItem, i: number) => (
           <button
             key={item.id}
             type="button"
@@ -193,48 +146,18 @@ export default function Gallery() {
       </div>
 
       {lightboxOpen && (
-        <div
-          className="lightbox-backdrop"
-          onClick={() => setLightboxOpen(false)}
-          role="dialog"
-          aria-modal="true"
-          aria-label={captionFor(current.id, current.alt)}
-        >
-          <div className="lightbox-content" onClick={(e) => e.stopPropagation()}>
-            <button
-              type="button"
-              className="lightbox-close"
-              onClick={() => setLightboxOpen(false)}
-              aria-label={t.gallery.closeLabel}
-            >
-              ×
-            </button>
-            <button
-              type="button"
-              className="lightbox-nav lightbox-prev"
-              onClick={() => advance(-1)}
-              aria-label={t.gallery.prevLabel}
-            >
-              ‹
-            </button>
-            <button
-              type="button"
-              className="lightbox-nav lightbox-next"
-              onClick={() => advance(1)}
-              aria-label={t.gallery.nextLabel}
-            >
-              ›
-            </button>
-
-            {current.type === "video" ? (
-              <video src={current.src} poster={current.poster} controls autoPlay playsInline />
-            ) : (
-              <img src={current.src} alt={captionFor(current.id, current.alt)} />
-            )}
-
-            <p className="lightbox-caption">{captionFor(current.id, current.alt)}</p>
-          </div>
-        </div>
+        <Lightbox
+          item={current}
+          caption={captionFor(current.id, current.alt)}
+          labels={{
+            close: t.gallery.closeLabel,
+            prev: t.gallery.prevLabel,
+            next: t.gallery.nextLabel,
+          }}
+          onClose={() => setLightboxOpen(false)}
+          onPrev={() => advance(-1)}
+          onNext={() => advance(1)}
+        />
       )}
     </>
   );
