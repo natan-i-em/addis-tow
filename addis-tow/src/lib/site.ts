@@ -6,7 +6,7 @@
 
 export const site = {
   name: "Rapid Tow Truck",
-  legalName: "Rapid Tow Truck", 
+  legalName: "Rapid Tow Truck",
   tagline: "24/7 towing and roadside recovery",
   description:
     "Flatbed towing, accident recovery, jump starts and roadside help across Addis Ababa. Call or send your location and a truck is on the way.",
@@ -50,7 +50,7 @@ export const services: Service[] = [
     headline: "Flatbed towing in Addis Ababa",
     description:
       "All four wheels off the ground. The safest way to move low-clearance cars, all-wheel-drive cars, and any vehicle that can no longer roll.",
-    priceFrom: 2500,
+    priceFrom: 3500,
     glyph: "flatbed",
     details: [
       "Hydraulic tilt bed, winch-loaded — no lifting damage",
@@ -66,7 +66,7 @@ export const services: Service[] = [
     headline: "Accident and collision recovery",
     description:
       "We clear the scene quickly, photograph the vehicle for your insurer, and store it under guard until the claim is settled.",
-    priceFrom: 3000,
+    priceFrom: 5000,
     glyph: "crash",
     details: [
       "Scene photographs and a timestamped condition report",
@@ -82,7 +82,7 @@ export const services: Service[] = [
     headline: "Heavy duty towing and equipment moves",
     description:
       "Rotator and heavy wrecker capacity for minibuses, Isuzu trucks, construction plant and overturned loads.",
-    priceFrom: 8000,
+    priceFrom: 10000,
     glyph: "heavy",
     details: [
       "Up to 25 tonnes recovered and righted",
