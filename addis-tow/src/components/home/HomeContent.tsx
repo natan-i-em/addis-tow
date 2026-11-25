@@ -164,7 +164,7 @@ export default function HomeContent() {
               const copy = t.services.items[s.slug];
               return (
                 <Reveal key={s.slug} delay={i * 45}>
-                  <Link href={`/services/${s.slug}`} className="svc">
+                  <a href="#pricing" className="svc">
                     <Glyph name={s.glyph} />
                     <h3>{copy?.name ?? s.name}</h3>
                     <p>{copy?.short ?? s.short}</p>
@@ -175,7 +175,7 @@ export default function HomeContent() {
                       </span>
                       <span className="svc-more">{t.services.detailsLink}</span>
                     </div>
-                  </Link>
+                  </a>
                 </Reveal>
               );
             })}
@@ -213,7 +213,11 @@ export default function HomeContent() {
               const copy = t.coverage.items[a.slug];
               return (
                 <Reveal key={a.slug} delay={i * 40}>
-                  <Link href={`/towing/${a.slug}`} className="area">
+                  <a
+                    href={`tel:${site.phone}`}
+                    className="area"
+                    title={`Call for dispatch in ${copy?.name ?? a.name}`}
+                  >
                     <h3>
                       {copy?.name ?? a.name}{" "}
                       <span className="eta">
@@ -221,7 +225,7 @@ export default function HomeContent() {
                       </span>
                     </h3>
                     <p>{a.nearby.join(" · ")}</p>
-                  </Link>
+                  </a>
                 </Reveal>
               );
             })}

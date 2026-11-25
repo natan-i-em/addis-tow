@@ -34,7 +34,7 @@ export default function Footer() {
             <ul>
               {services.slice(0, 6).map((s) => (
                 <li key={s.slug}>
-                  <Link href={`/services/${s.slug}`}>
+                  <Link href="/#services">
                     {t.services.items[s.slug]?.name ?? s.name}
                   </Link>
                 </li>
@@ -47,7 +47,7 @@ export default function Footer() {
             <ul>
               {areas.slice(0, 6).map((a) => (
                 <li key={a.slug}>
-                  <Link href={`/towing/${a.slug}`}>
+                  <Link href="/#coverage">
                     {t.coverage.items[a.slug]?.name ?? a.name}
                   </Link>
                 </li>
@@ -60,13 +60,19 @@ export default function Footer() {
 
             <ul style={{ marginTop: "1rem" }}>
               <li>
-                <a href={site.telegram}>{t.footer.telegram}</a>
+                <a href={site.telegram} target="_blank" rel="noopener noreferrer">
+                  {t.footer.telegram}
+                </a>
               </li>
               <li>
-                <a href={site.telegram}>{t.footer.telegram}</a>
+                <a href={`tel:${site.phone}`}>
+                  {site.phoneDisplay}
+                </a>
               </li>
               <li>
-                <a href={site.telegram}>{t.footer.telegram}</a>
+                <a href={`mailto:${site.email}`}>
+                  {site.email}
+                </a>
               </li>
             </ul>
           </div>
