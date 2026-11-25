@@ -10,7 +10,7 @@
  * `alt` is the English fallback (and what screen readers get if a language's
  * caption is somehow missing) — the on-screen caption itself is translated
  * in src/lib/i18n/dictionary.ts, under `gallery.items` for photos and
- * `videoGallery.items` for videos, matched by `id`.
+ * `videoGallery.items` for videos, matched by `id`. hgvnbn ng 
  */
 
 export type GalleryItem = {
